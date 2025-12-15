@@ -1,57 +1,126 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Cek Kelulusan Staff FPD 2026</title>
-
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-
-<style>
-body{font-family:Arial;background:#f1f5f9;padding:30px}
-.box{max-width:420px;background:#fff;margin:auto;padding:25px;border-radius:8px;text-align:center}
-input{width:100%;padding:10px;margin:8px 0}
-button{padding:10px 20px;background:#1e3a8a;color:#fff;border:none;cursor:pointer}
-.lolos{color:green;font-weight:bold}
-.tidak{color:red;font-weight:bold}
-</style>
+    <meta charset="UTF-8">
+    <title> Staff FPD 2026</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            padding: 30px;
+        }
+        .box {
+            max-width: 450px;
+            background: white;
+            margin: auto;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .hasil {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .lolos {
+            color: green;
+        }
+        .tidak {
+            color: red;
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="box">
-<h2>Cek Kelulusan Staff FPD 2026</h2>
+    <h2>Cek Kelulusan Staff FPD 2026</h2>
+    <p>Masukkan nama lengkap dan asal sekolah</p>
 
-<input id="nama" placeholder="Nama Lengkap">
-<input id="sekolah" placeholder="Asal Sekolah">
+    <input type="text" id="nama" placeholder="Nama Lengkap">
+    <input type="text" id="sekolah" placeholder="SMA 2 PINRANG/SMK 5 PINRANG">
 
-<button onclick="cek()">Cek Kelulusan</button>
-<div id="hasil"></div>
+    <button onclick="cekKelulusan()">Cek Kelulusan</button>
+
+    <div id="hasil" class="hasil"></div>
 </div>
 
 <script>
-let data = [];
+    // ===============================
+    // DATA LOLOS STAFF FPD 2026
+    // ===============================
+    const dataLolos = [
+        { nama: "INDRA SETIAWAN", sekolah: "SMA 2 PINRANG" },
+        { nama: "ABIL SAFAAT", sekolah: "SMK 5 PINRANG" },
+        { nama: "DIAN ADE PUTRI", sekolah: "SMA 2 PINRANG" },
+        { nama: "JULIANTI", sekolah: "SMA 2 PINRANG" },
+        { nama: "AISYA ALYA", sekolah: "SMA 2 PINRANG" },
+        { nama: "AULIA CITRA ANUGRAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "AFDAL RUDI", sekolah: "SMA 2 PINRANG" },
+        { nama: "AZIZUL ISMI UMAR", sekolah: "SMK 5 PINRANG" },
+        { nama: "JUMRIAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "KHAIRUN NISA", sekolah: "SMK 5 PINRANG" },
+        { nama: "KAMELIANI", sekolah: "SMK 5 PINRANG" },
+        { nama: "MUHAMMAD TAUFIQ", sekolah: "SMA 2 PINRANG" },
+        { nama: "NUR FITRA RAMADHANI", sekolah: "SMK 5 PINRANG" },
+        { nama: "REHAN", sekolah: "SMA 2 PINRANG" },
+        { nama: "RIANA", sekolah: "SMA 2 PINRANG" },
+        { nama: "SAKINAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "YANA", sekolah: "SMA 2 PINRANG" },
+        { nama: "ABDUL FATTA RIFAI", sekolah: "SMA 2 PINRANG" },
+        { nama: "AKBAR", sekolah: "SMA 2 PINRANG" },
+        { nama: "DANIA AMIRAH", sekolah: "SMK 5 PINRANG" },
+        { nama: "MELYSAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "MUH SAING", sekolah: "SMA 2 PINRANG" },
+        { nama: "MUH ILYAS", sekolah: "SMA 2 PINRANG" },
+        { nama: "NUR FAIDAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "NUR ALAMSYAH ILHAM", sekolah: "SMA 2 PINRANG" },
+        { nama: "NURUL MAGHFIRAH", sekolah: "SMK 5 PINRANG" },
+        { nama: "RESKY NUR AZYFAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "RADIATUL MUNAWARRAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "TIWI LESTARI", sekolah: "SMA 2 PINRANG" },
+        { nama: "ZAZKIA RAMADHANI", sekolah: "SMK 5 PINRANG" },
+        { nama: "ANUGRAH ALAM", sekolah: "SMA 2 PINRANG" },
+        { nama: "EVIANA KARINA", sekolah: "SMA 2 PINRANG" },
+        { nama: "NURAULIA", sekolah: "SMA 2 PINRANG" },
+        { nama: "PANI", sekolah: "SMK 5 PINRANG" },
+        { nama: "RESKY HELL YANTII", sekolah: "SMK 5 PINRANG" },
+        { nama: "SAFNI MAULANA ASRIADI", sekolah: "SMA 2 PINRANG" },
+        { nama: "SYARIDAH", sekolah: "SMA 2 PINRANG" },
+        { nama: "WAHYUNI", sekolah: "SMA 2 PINRANG" },
+        { nama: "WAHYULIA", sekolah: "SMK 5 PINRANG" }
+    ];
 
-Papa.parse("data-lolos.csv", {
-    download: true,
-    header: true,
-    complete: function(results) {
-        data = results.data;
+    function cekKelulusan() {
+        const namaInput = document.getElementById("nama").value.toUpperCase().trim();
+        const sekolahInput = document.getElementById("sekolah").value.toUpperCase().trim();
+        const hasil = document.getElementById("hasil");
+
+        const ditemukan = dataLolos.find(d =>
+            d.nama === namaInput && d.sekolah === sekolahInput
+        );
+
+        if (ditemukan) {
+            hasil.innerHTML = "🎉 SELAMAT! ANDA <span class='lolos'>LOLOS</span> SEBAGAI STAFF FPD 2026/HUBUNGI NOMOR INI UNTUK INFO LEBIH LANJUT 082193374985";
+        } else {
+            hasil.innerHTML = "❌ MAAF, DATA ANDA BELUM SESUAI <span class='tidak'>TIDAK LOLOS/ Mohon cek kembali penulisan nama lengkap dan asal sekolah tanpa tanda baca</span>";
+        }
     }
-});
-
-function cek(){
-    let nama = document.getElementById("nama").value.toUpperCase().trim();
-    let sekolah = document.getElementById("sekolah").value.toUpperCase().trim();
-
-    let ditemukan = data.find(d =>
-        d.Nama.toUpperCase().trim() === nama &&
-        d.Sekolah.toUpperCase().trim() === sekolah
-    );
-
-    document.getElementById("hasil").innerHTML = ditemukan
-    ? "SELAMAT, ANDA <span class='lolos'>LOLOS</span>"
-    : "MAAF, ANDA <span class='tidak'>TIDAK LOLOS</span>";
-}
 </script>
 
 </body>
