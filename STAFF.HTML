@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Cek Kelulusan Staff FPD 2026</title>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<style>
+body{font-family:Arial;background:#f1f5f9;padding:30px}
+.box{max-width:420px;background:#fff;margin:auto;padding:25px;border-radius:8px;text-align:center}
+input{width:100%;padding:10px;margin:8px 0}
+button{padding:10px 20px;background:#1e3a8a;color:#fff;border:none;cursor:pointer}
+.lolos{color:green;font-weight:bold}
+.tidak{color:red;font-weight:bold}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>Cek Kelulusan Staff FPD 2026</h2>
+
+<input id="nama" placeholder="Nama Lengkap">
+<input id="sekolah" placeholder="Asal Sekolah">
+
+<button onclick="cek()">Cek Kelulusan</button>
+<div id="hasil"></div>
+</div>
+
+<script>
+let data = [];
+
+Papa.parse("data-lolos.csv", {
+    download: true,
+    header: true,
+    complete: function(results) {
+        data = results.data;
+    }
+});
+
+function cek(){
+    let nama = document.getElementById("nama").value.toUpperCase().trim();
+    let sekolah = document.getElementById("sekolah").value.toUpperCase().trim();
+
+    let ditemukan = data.find(d =>
+        d.Nama.toUpperCase().trim() === nama &&
+        d.Sekolah.toUpperCase().trim() === sekolah
+    );
+
+    document.getElementById("hasil").innerHTML = ditemukan
+    ? "SELAMAT, ANDA <span class='lolos'>LOLOS</span>"
+    : "MAAF, ANDA <span class='tidak'>TIDAK LOLOS</span>";
+}
+</script>
+
+</body>
+</html>
